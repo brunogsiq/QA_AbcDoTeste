@@ -26,4 +26,6 @@
         https://developer.marvel.com/documentation/generalinfo
         https://serverest.dev/
         https://www.football-data.org/
+        https://pokeapi.co/#google_vignette
+        https://fakerestapi.azurewebsites.net/index.html
 */
