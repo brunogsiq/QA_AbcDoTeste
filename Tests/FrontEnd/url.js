@@ -32,4 +32,6 @@
         https://magento.softwaretestingboard.com/
         https://petstore.octoperf.com/
         https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login
+        https://petlov.vercel.app/
+        https://www.automationexercise.com/
 */
