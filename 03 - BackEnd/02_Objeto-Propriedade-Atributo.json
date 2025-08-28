@@ -1,0 +1,57 @@
+Show, bora montar a tabela comparativa 👌
+
+---
+
+| Termo                      | O que é?                                                               | Exemplo em JSON                 | Explicação 
+| -------------------------- | ---------------------------------------------------------------------- | ------------------------------- | 
+| **Objeto**                 | Um **conjunto** de dados (um "pacote" que contém várias propriedades). | `{ "usuario": { ... } }`        | É como uma    ficha/cadastro inteiro.  |
+| **Propriedade** (ou chave) | O **nome do campo** dentro do objeto.                                  | `"nome": "Bruno"`               | É o rótulo do campo, ex: "Nome".    |
+| **Atributo** (ou valor)    | O **conteúdo** associado a uma propriedade.                            | `"nome": "Bruno"` → **"Bruno"** | É a informação preenchida no campo. |
+
+
+---
+
+# ✅ Exemplo Visual
+
+```json
+{
+  "usuario": {
+    "nome": "Bruno",
+    "idade": 30,
+    "ativo": true
+  }
+}
+```
+
+* **Objeto** → `"usuario"`
+* **Propriedades** → `"nome"`, `"idade"`, `"ativo"`
+* **Atributos (valores)** → `"Bruno"`, `30`, `true`
+
+---
+
+# 🔹 Exemplo Mais Completo
+
+```json
+{
+  "carro": {
+    "marca": "Toyota",
+    "ano": 2020,
+    "cores": ["preto", "branco", "prata"],
+    "dono": {
+      "nome": "Ana",
+      "idade": 28
+    }
+  }
+}
+```
+
+* **Objeto principal**: `carro`
+* **Propriedades**: `marca`, `ano`, `cores`, `dono`
+* **Atributos**:
+
+  * `"Toyota"` (string)
+  * `2020` (número)
+  * `["preto", "branco", "prata"]` (lista/array)
+  * outro **objeto** → `{"nome": "Ana", "idade": 28}`
+
+---

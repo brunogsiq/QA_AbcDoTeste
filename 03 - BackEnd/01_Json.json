@@ -1,0 +1,85 @@
+{
+    "objeto": {
+        "propriedade": "atributo"
+    }
+}
+
+//associações: O_P_A
+
+objeto → é uma entidade (nesse caso, um bloco { ... }).
+
+propriedade → é uma característica dentro desse objeto.
+
+atributo → é o valor associado à propriedade.
+
+👉 Em outras palavras:
+
+O objeto é como um cadastro.
+
+A propriedade é o campo do cadastro (ex: nome, idade).
+
+O atributo é o valor preenchido nesse campo (ex: Bruno, 30).
+
+---
+
+{
+  "usuario": {
+    "nome": "Bruno",
+    "idade": 30,
+    "email": "bruno@example.com"
+  }
+}
+
+usuario → objeto
+
+Dentro dele temos 3 propriedades:
+
+nome → com atributo "Bruno"
+
+idade → com atributo 30
+
+email → com atributo "bruno@example.com"
+
+---
+
+{
+  "usuario": {
+    "nome": "Bruno",
+    "idade": 30,
+    "enderecos": [
+      {
+        "tipo": "residencial",
+        "cidade": "São Paulo",
+        "estado": "SP"
+      },
+      {
+        "tipo": "comercial",
+        "cidade": "Rio de Janeiro",
+        "estado": "RJ"
+      }
+    ],
+    "ativo": true
+  }
+}
+
+usuario → objeto principal.
+
+nome, idade, enderecos, ativo → propriedades.
+
+Seus respectivos valores (atributos):
+
+"Bruno" (string)
+
+30 (número)
+
+lista de endereços (array com 2 objetos)
+
+true (booleano)
+
+Resumindo
+
+Objeto → é um "pacote" de informações.
+
+Propriedade (ou chave) → é o "campo" dentro desse pacote.
+
+Atributo (ou valor) → é o conteúdo associado a cada campo.
