@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fluxo Visual: Regra de Negócio → Critérios de Aceite → Testes</title>
+  <style>
+    :root{
+      --bg: #0e1116;
+      --card: #151a22;
+      --text: #e6edf3;
+      --muted: #9aa6b2;
+      --accent: #6ea8fe;
+      --accent-2: #8bd5ff;
+      --ok: #65d46e;
+      --warn: #ffd166;
+      --err: #ff6b6b;
+      --shadow: rgba(0,0,0,.3);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 70% -10%, #1a2230 0%, #0e1116 55%  ), var(--bg);
+      color:var(--text);
+      line-height:1.6;
+    }
+    .container{max-width:1100px; margin:48px auto; padding:0 20px}
+    h1{font-size:clamp(1.4rem, 2vw + .8rem, 2rem); margin:0 0 8px}
+    p.lead{color:var(--muted); margin-top:0}
+
+    /* Pyramid */
+    .pyramid{
+      display:grid; gap:14px; margin:28px 0 10px;
+    }
+    .layer{
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.00));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;
+      padding:16px 18px;
+      box-shadow: 0 10px 24px var(--shadow), inset 0 1px 0 rgba(255,255,255,.05);
+      position:relative;
+      overflow:hidden;
+    }
+    .layer:before{
+      content:""; position:absolute; inset:0; pointer-events:none;
+      background: linear-gradient(90deg, transparent, rgba(110,168,254,.12), transparent);
+      opacity:.6; mask: linear-gradient(180deg, transparent 0%, black 40%, black 60%, transparent 100%);
+    }
+    .layer h3{margin:0 0 6px; font-size:clamp(1rem, .5vw + .9rem, 1.2rem)}
+    .layer small{color:var(--muted)}
+
+    /* Widths for pyramid effect */
+    .layer.base{width:100%;}
+    .layer.mid{width:min(85%, 920px); margin-inline:auto}
+    .layer.top{width:min(68%, 780px); margin-inline:auto}
+
+    .chip{display:inline-flex; align-items:center; gap:8px; font-size:.9rem; color:var(--text);
+      background: rgba(110,168,254,.12); border:1px solid rgba(110,168,254,.35); padding:6px 10px; border-radius:999px}
+    .chip i{width:10px; height:10px; border-radius:50%; background:var(--accent)}
+
+    ul{margin:8px 0 0 18px}
+    li{margin:4px 0}
+
+    .legend{display:flex; flex-wrap:wrap; gap:10px; margin-top:8px}
+    .legend .tag{font-size:.85rem; padding:4px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.14)}
+    .ok{background:rgba(101,212,110,.12); border-color:rgba(101,212,110,.35)}
+    .warn{background:rgba(255,209,102,.10); border-color:rgba(255,209,102,.35)}
+    .err{background:rgba(255,107,107,.12); border-color:rgba(255,107,107,.35)}
+
+    /* Linear flow */
+    .flow{display:grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap:12px; align-items:center; margin:32px 0}
+    .card{background:var(--card); border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:14px}
+    .arrow{font-size:22px; color:var(--accent-2)}
+
+    .kbd{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; background:#0b0f14; border:1px solid rgba(255,255,255,.1); border-radius:6px; padding:2px 6px}
+
+    /* Example box */
+    .example{margin-top:18px; padding:12px 14px; border-radius:12px; background: linear-gradient(180deg, rgba(139,213,255,.08), rgba(139,213,255,.02)); border:1px solid rgba(139,213,255,.25)}
+    pre{margin:10px 0; white-space:pre-wrap; word-break:break-word; background:#0b0f14; border:1px solid rgba(255,255,255,.08); padding:12px; border-radius:10px}
+
+    @media (max-width: 820px){
+      .flow{grid-template-columns: 1fr; gap:10px}
+      .arrow{display:none}
+      .layer.mid{width:100%}
+      .layer.top{width:100%}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Fluxo Visual: <span class="kbd">Regra de Negócio → Critérios de Aceite → Testes</span></h1>
+    <p class="lead">Use este esquema para alinhar entendimento com time de produto, desenvolvimento e QA.</p>
+
+    <!-- Pyramid -->
+    <section class="pyramid" aria-label="Pirâmide de relacionamento">
+      <div class="layer base">
+        <span class="chip"><i></i>Base do funcionamento</span>
+        <h3>Regras de Negócio</h3>
+        <small>Políticas, leis ou práticas que governam o sistema.</small>
+        <ul>
+          <li>Definem <strong>como deve funcionar</strong>.</li>
+          <li>Estão ligadas ao domínio (ex.: crédito, cadastro, tributação).</li>
+          <li>Relativamente estáveis; mudam quando a política muda.</li>
+        </ul>
+      </div>
+
+      <div class="layer mid">
+        <span class="chip"><i></i>Condições verificáveis</span>
+        <h3>Critérios de Aceite</h3>
+        <small>Transformam regras e requisitos em condições testáveis.</small>
+        <ul>
+          <li>Respondem: <em>o que precisa estar presente/testado para aceitar?</em></li>
+          <li>Claros, objetivos e mensuráveis (preferencialmente em BDD).</li>
+          <li>Validam a regra de negócio em cenários positivos e negativos.</li>
+        </ul>
+      </div>
+
+      <div class="layer top">
+        <span class="chip"><i></i>Evidência de qualidade</span>
+        <h3>Testes (Manuais e Automatizados)</h3>
+        <small>Executam os critérios e produzem evidências.</small>
+        <ul>
+          <li>UI, API, integração, contrato, performance, segurança etc.</li>
+          <li>Geram logs, prints, relatórios e métricas de confiabilidade.</li>
+          <li>Vivem no pipeline (CI/CD) e na suíte regressiva.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Linear flow diagram -->
+    <section class="flow" aria-label="Fluxo linear">
+      <div class="card">
+        <h3>Regra de Negócio</h3>
+        <p><strong>Unicidade de e-mail</strong>: cada cliente deve ter um e-mail único.</p>
+      </div>
+      <div class="arrow" aria-hidden>➜</div>
+      <div class="card">
+        <h3>Critérios de Aceite</h3>
+        <ul>
+          <li>Bloquear cadastro se e-mail já existir.</li>
+          <li>Exibir mensagem: <em>“E-mail já registrado. Use outro e-mail.”</em></li>
+          <li>Permitir cadastro com e-mail novo e válido.</li>
+        </ul>
+      </div>
+      <div class="arrow" aria-hidden>➜</div>
+      <div class="card">
+        <h3>Testes</h3>
+        <ul>
+          <li>API: POST <span class="kbd">/clientes</span> com e-mail repetido → <span class="kbd">409</span>.</li>
+          <li>UI: tentar salvar com e-mail existente → valida mensagem.</li>
+          <li>Contrato: schema inclui <span class="kbd">email</span> como <em>unique</em>.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- BDD Example -->
+    <section class="example" aria-label="Exemplo BDD">
+      <h3>Exemplo BDD (Gherkin) – E-mail Único por Cliente</h3>
+      <pre>
+Funcionalidade: Cadastro de cliente com e-mail único
+  Regra: O e-mail do cliente deve ser único no sistema
+
+  Cenário: Bloquear cadastro com e-mail já existente
+    Dado que existe um cliente cadastrado com o e-mail "joao@exemplo.com"
+    Quando eu tento cadastrar um novo cliente com o e-mail "joao@exemplo.com"
+    Então o sistema deve impedir o cadastro
+    E deve exibir a mensagem "E-mail já registrado. Use outro e-mail."
+
+  Cenário: Permitir cadastro com e-mail novo
+    Dado que não existe cliente com o e-mail "maria@exemplo.com"
+    Quando eu cadastro um novo cliente com o e-mail "maria@exemplo.com"
+    Então o sistema deve cadastrar o cliente com sucesso
+    E deve exibir a mensagem "Cadastro realizado com sucesso"
+      </pre>
+      <p style="color:var(--muted); margin:0">💡 Dica: reflita os mesmos cenários em testes de API, UI e banco (unique index).</p>
+    </section>
+
+    <div class="legend" aria-label="Legenda de estados">
+      <span class="tag ok">happy path</span>
+      <span class="tag warn">bordas/validações</span>
+      <span class="tag err">erros esperados</span>
+    </div>
+
+    <p style="margin-top:22px; color:var(--muted)">Pronto para incorporar em documentação interna, wikis ou páginas de projeto. 100% responsivo.</p>
+  </div>
+</body>
+</html>
+
+<!--
+
+Excelente ponto, Bruno! Vamos retomar com clareza a **diferença entre regras de negócio e critérios de aceite**, e como elas se aplicam em testes, especialmente com um exemplo da tela de login que você trouxe.
+
+---
+
+### ✅ **1. O que são Regras de Negócio e Critérios de Aceite?**
+
+#### 🔹 **Regras de Negócio**
+
+São **leis, políticas, normas ou lógicas específicas da empresa** ou do domínio do sistema. Elas existem **independente da interface ou da implementação**, e geralmente orientam **como o sistema deve se comportar ou restringir o uso**.
+
+* Costumam ser **mais amplas** e **nem sempre diretamente testáveis** sem um contexto de execução.
+* Normalmente são **documentadas em histórias, requisitos ou modelos de negócio**.
+
+#### 🔸 **Critérios de Aceite**
+
+São **condições específicas e testáveis** que determinam **se uma funcionalidade atende ao que foi pedido**. São usados para **validar se a entrega está conforme esperado**.
+
+* Sempre devem ser **claros, objetivos e testáveis**.
+* Podem ser escritos em formato **BDD (Dado, Quando, Então)**.
+* Ajudam a garantir o **"Pronto"** (Definition of Done).
+
+---
+
+### 🔁 **2. Se uma regra de negócio é testável, ela vira critério de aceite?**
+
+Exatamente, essa é uma **confusão comum e válida**.
+
+📌 **Nem toda regra de negócio é um critério de aceite**, mas **todo critério de aceite precisa ser testável**.
+
+✅ Quando uma regra de negócio **é implementada numa funcionalidade específica**, e **pode ser validada de forma objetiva**, ela pode (e deve) ser traduzida em **critérios de aceite testáveis**.
+
+---
+
+### 👨‍💻 **3. Exemplo Prático: Tela de Login**
+
+#### 📋 Regras de Negócio (não necessariamente visíveis na UI)
+
+* O nome de usuário **não pode conter números nem caracteres especiais**.
+* A senha deve conter **entre 6 e 10 caracteres**, com **pelo menos uma letra maiúscula, um número e um caractere especial**.
+* Para realizar login, os dois campos devem estar **preenchidos corretamente**.
+
+#### ✅ Critérios de Aceite (testáveis na interface)
+
+1. **Placeholder**:
+
+   * O campo de usuário deve exibir o placeholder: `"Digite seu nome de usuário"`.
+   * O campo de senha deve exibir o placeholder: `"Digite sua senha"`.
+
+2. **Validações ao clicar em "Login"**:
+
+   * Se **usuário** estiver vazio, mostrar alerta: `"Usuário é obrigatório"`.
+   * Se **senha** estiver vazia, mostrar alerta: `"Senha é obrigatória"`.
+
+3. **Validações de conteúdo**:
+
+   * Se o usuário inserir `"joao123"` → mostrar alerta: `"Nome de usuário inválido"`.
+   * Se a senha inserida for `"abcde"` → mostrar alerta: `"Senha inválida. Siga os critérios de segurança"`.
+
+---
+
+### 🧪 Exemplo de Cenários BDD para esse caso
+
+```gherkin
+Funcionalidade: Login no sistema
+
+Cenário: Validação de campos obrigatórios
+  Dado que o usuário está na tela de login
+  Quando clica no botão "Login" sem preencher os campos
+  Então o sistema deve exibir o alerta "Usuário é obrigatório"
+  E o sistema deve exibir o alerta "Senha é obrigatória"
+
+Cenário: Validação de formato inválido do nome de usuário
+  Dado que o usuário está na tela de login
+  Quando preenche o campo usuário com "joao123"
+  E preenche a senha corretamente
+  E clica no botão "Login"
+  Então o sistema deve exibir o alerta "Nome de usuário inválido"
+
+Cenário: Validação de senha com critérios inválidos
+  Dado que o usuário está na tela de login
+  Quando preenche o campo usuário com "joaosilva"
+  E preenche o campo senha com "abcde"
+  E clica no botão "Login"
+  Então o sistema deve exibir o alerta "Senha inválida. Siga os critérios de segurança"
+```
+
+---
+
+### 🧠 Resumo
+
+| Termo                  | É testável? | Nível        | Exemplo                                                  |
+| ---------------------- | ----------- | ------------ | -------------------------------------------------------- |
+| **Regra de negócio**   | Nem sempre  | Estratégico  | Senha deve conter número, maiúscula e caractere especial |
+| **Critério de aceite** | Sim         | Funcional/UI | Ao digitar senha "abc", deve mostrar "Senha inválida"    |
+
+---
+
+Se quiser, posso converter isso tudo em um **modelo fixo** para você usar com histórias de usuário do Jira (com espaço para: Descrição, Regras, Critérios de aceite, e Testes BDD). Deseja isso?

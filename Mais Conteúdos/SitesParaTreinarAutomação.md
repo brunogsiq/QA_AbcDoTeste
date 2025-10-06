@@ -16,7 +16,7 @@ FrontEnd:
 14. https://testautomationpractice.blogspot.com/
 15. http://aprendendotestar.com.br/testlink/login.php
 16. https://demo.nopcommerce.com/
-17. https://www.saucedemo.com/v1/
+17. https://www.saucedemo.com/
 18. https://wcaquino.me/cypress/componentes.html
 19. https://starbugs.vercel.app/
 20. https://barrigareact.wcaquino.me/login
