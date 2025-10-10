@@ -1,1 +1,0 @@
-cycle time e lead time
